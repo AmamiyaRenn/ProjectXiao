@@ -131,3 +131,5 @@ BEHIND_RIGHT_B_PIN	PD2	    左电机使能IO
 #define COMM_DOWN 'B'  //后退
 #define COMM_LEFT 'C'  //左转
 #define COMM_RIGHT 'D' //右转
+
+#define SEND_BUF_SIZE 256 // USART_BUF_SIZE

@@ -15,6 +15,7 @@
 #include "led.h"
 #include "Xiao.h"
 #include "IRCtrl.h"
+#include "dma.h"
 
 #ifdef __cplusplus
 extern "C"

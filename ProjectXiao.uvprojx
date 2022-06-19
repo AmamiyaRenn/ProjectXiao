@@ -439,6 +439,11 @@
               <FilePath>.\Function\INC\MyMath.h</FilePath>
             </File>
             <File>
+              <FileName>queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Function\INC\queue.h</FilePath>
+            </File>
+            <File>
               <FileName>Coordinate.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Function\INC\Coordinate.h</FilePath>
@@ -467,6 +472,11 @@
               <FileName>usart.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Hardware\SRC\usart.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>dma.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Hardware\SRC\dma.cpp</FilePath>
             </File>
             <File>
               <FileName>led.c</FileName>

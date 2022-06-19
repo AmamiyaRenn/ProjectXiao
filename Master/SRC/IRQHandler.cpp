@@ -84,3 +84,12 @@ void TIM2_IRQHandler()
 		Xiao->updateState(); // 把状态更新放在这里，更加准确
 	}
 }
+
+void DMA1_Channel3_IRQHandler(void)
+{
+	if (DMA_GetITStatus(DMA1_IT_TC3) == SET)
+	{
+		DMA_ClearFlag(DMA1_IT_TC3);
+		DMA_ClearITPendingBit(DMA1_IT_TC3);
+	}
+}
