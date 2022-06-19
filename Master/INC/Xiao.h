@@ -8,11 +8,22 @@
 #ifndef _XIAO_H
 #define _XIAO_H
 
+#include "MasterParam.h"
+#include "Chassis.h"
+
 class XiaoClass
 {
 public:
-    XiaoClass();
-    ~XiaoClass();
+    void Init() { Chassis.MotorHardwareInit(); }
+    void updateState() { Chassis.updateAllMotor(); }
+    void Run(s8 leftSpeed, s8 rightSpeed) { Chassis.setAllMotorSpeed(leftSpeed, rightSpeed); }
+    XiaoControlModeEnum getControlMode() const { return ControlMode; }
+
+private:
+    ChassisClass Chassis;
+    XiaoControlModeEnum ControlMode;
 };
+
+extern XiaoClass *Xiao;
 
 #endif

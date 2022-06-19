@@ -6,3 +6,5 @@
  * @WHUROBOCON_Alright_Reserved
  */
 #include "Xiao.h"
+
+XiaoClass *Xiao;

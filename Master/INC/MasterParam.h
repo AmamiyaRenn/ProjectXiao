@@ -14,15 +14,17 @@
 
 enum XiaoControlModeEnum
 {
-    Debug,
-    Gamepad, // 手动遥控操作，用来演示行走等基本操作，比如参加展览用，游戏手柄可以给别人操作
-    Match,
+    InfraredRemoteControl,  // 红外遥控模式
+    BluetoothRemoteControl, // 蓝牙遥控模式
+    PathTracingControl,     // 红外黑线循迹
+
 };
 
 struct ControlMsgStruct
 {
 public:
     bool Reset; // 软件重启
+    XiaoControlModeEnum ControlMode;
 };
 
 struct RobotMsgStruct
