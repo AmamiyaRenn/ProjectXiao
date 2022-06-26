@@ -12,36 +12,39 @@
 #include "usart.h"
 #include "data_processing.h"
 
-enum XiaoControlModeEnum
+enum XiaoControlModeEnum : uint32_t
 {
-    InfraredRemoteControl,  // 红外遥控模式
     BluetoothRemoteControl, // 蓝牙遥控模式
     PathTracingControl,     // 红外黑线循迹
-
+    InfraredRemoteControl,  // 红外遥控模式
 };
 
 struct ControlMsgStruct
 {
 public:
+    bool Begin;
     bool Reset; // 软件重启
-	float leftSpeed,rightSpeed;
+    float leftSpeed, rightSpeed;
     XiaoControlModeEnum ControlMode;
+    Vector2f JoyStickPos; // 摇杆位置
 };
 
 struct RobotMsgStruct
 {
     float WorldTime; // 全局时间(ms)
-    float StartTime; // 开始某类运动的某个周期的WorldTime时刻(ms)
-    float Runtime;   // 开始某类运动的某个周期后的当前运行时间
+    float leftSpeed, rightSpeed;
 };
 
 class MasterParam
 {
 public:
+    void ReadMsg(u32 temp);
+    void SendMsg();
     ControlMsgStruct ControlMsg;
     RobotMsgStruct RobotMsg;
 
 private:
+    UsartClass *usart;
     DataProcess data_process;
 };
 extern MasterParam Master;

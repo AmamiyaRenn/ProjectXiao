@@ -7,6 +7,8 @@
  */
 #include "Chassis.h"
 
+ChassisClass Chassis;
+
 // 电机硬件初始化
 void ChassisClass::MotorHardwareInit()
 {

@@ -9,14 +9,14 @@
 #define _IRCTRL_H
 
 #include "timer.h"
-#include "Xiao.h"
+#include "Macro.h"
 
 class IRCtrlClass
 {
 public:
     void Init();
     void RecNewMsg();
-    void Control(XiaoClass *Xiao);
+    // void Control(XiaoClass *Xiao);
 
 private:
     bool ir_rec_flag; // 接收数据标志位 1 有新数据 0 没有
@@ -24,7 +24,6 @@ private:
     u8 IRCOM[4];
     char ctrl_comm;
 };
-
-extern IRCtrlClass *IRCtrl;
+extern IRCtrlClass IRCtrl;
 
 #endif

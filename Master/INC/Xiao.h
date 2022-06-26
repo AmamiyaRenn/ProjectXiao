@@ -10,20 +10,21 @@
 
 #include "MasterParam.h"
 #include "Chassis.h"
+#include "IRCtrl.h"
+#include "JoyStick.h"
 
 class XiaoClass
 {
 public:
-    void Init() { Chassis.MotorHardwareInit(); }
-    void updateState() { Chassis.updateAllMotor(); }
-    void Run(s8 leftSpeed, s8 rightSpeed) { Chassis.setAllMotorSpeed(leftSpeed, rightSpeed); }
-    XiaoControlModeEnum getControlMode() const { return ControlMode; }
+    XiaoClass(ChassisClass *Chassis, IRCtrlClass *IRCtrl, JoyStickControlClass *JoyStickControl) : Chassis(Chassis), IRCtrl(IRCtrl), JoyStickControl(JoyStickControl){};
+    void updateState() { Chassis->updateAllMotor(); }
+    void Run(s8 leftSpeed, s8 rightSpeed) { Chassis->setAllMotorSpeed(leftSpeed, rightSpeed); }
+    void JoyStickFunction();
 
 private:
-    ChassisClass Chassis;
-    XiaoControlModeEnum ControlMode;
+    ChassisClass *Chassis;
+    IRCtrlClass *IRCtrl;
+    JoyStickControlClass *JoyStickControl;
 };
-
-extern XiaoClass *Xiao;
 
 #endif

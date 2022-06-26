@@ -7,6 +7,10 @@
  */
 #include "main.h"
 
+UsartClass Usart;
+JoyStickControlClass JoyStickControl;
+XiaoClass *Xiao;
+
 int main()
 {
 	SystemInit(); // 系统初始化
@@ -15,13 +19,13 @@ int main()
 
 	delay_ms(100); // 启动延时
 	GPIOCLKInit();
-	Xiao = new XiaoClass();
-	IRCtrl = new IRCtrlClass();
-	Xiao->Init();
-	IRCtrl->Init();
+	Chassis.MotorHardwareInit();
+	IRCtrl.Init();
 	LED_Init();
 	TIM2_Init();
 	Beep_Configuration();
+	Usart.usart3Init(115200);
+
 	Beep_Start();
 
 	OSInit(); // 启动UCOSII
@@ -40,21 +44,32 @@ static void TaskStart(void *pdata)
 	OS_ENTER_CRITICAL(); // 进入临界区
 	OSTaskCreate(TaskUSART, (void *)0, &task_USART_stk[TASK_USART_STK_SIZE - 1], TASK_USART_PRIO);
 	OSTaskCreate(TaskRUN, (void *)0, &task_RUN_stk[TASK_RUN_STK_SIZE - 1], TASK_RUN_PRIO);
+	OSTaskCreate(TaskScope, (void *)0, &task_Scope_stk[TASK_Scope_STK_SIZE - 1], TASK_Scope_PRIO);
 	OSTaskSuspend(START_TASK_PRIO); // 挂起开始任务
 	OS_EXIT_CRITICAL();				// 退出临界区
 }
 
 static void TaskRUN(void *pdata)
 {
+	Xiao = new XiaoClass(&Chassis, &IRCtrl, &JoyStickControl);
+	JoyStickControl.linkJoyStickPos(&Master.ControlMsg.JoyStickPos);
 	for (;;)
 	{
-		switch (Xiao->getControlMode())
+		if (Master.ControlMsg.Begin)
 		{
-		case InfraredRemoteControl:
-			IRCtrl->Control(Xiao);
-			break;
+			switch (Master.ControlMsg.ControlMode)
+			{
+			case BluetoothRemoteControl:
+				Xiao->JoyStickFunction();
+				break;
+
+			case InfraredRemoteControl:
+				Xiao->Run(Master.ControlMsg.leftSpeed, Master.ControlMsg.rightSpeed);
+				break;
+			}
 		}
-		Xiao->Run(Master.ControlMsg.leftSpeed, Master.ControlMsg.rightSpeed);
+		else
+			Xiao->Run(0, 0);
 		delay_ms(20);
 	}
 }
@@ -69,11 +84,21 @@ static void TaskUSART(void *pdata)
 	float usart_time_step = 4.0;
 	for (;;)
 	{
-		delay_ms(usart_time_step);
 		tic += 1;
 		if (tic % (int)(2 * 1000 / usart_time_step) < 1000 / usart_time_step)
 			LED2_ON;
 		else
 			LED2_OFF;
+		// Master.ReadMsg(_temp); // 上位机消息
+		delay_ms(usart_time_step);
+	}
+}
+
+static void TaskScope(void *pdata)
+{
+	for (;;)
+	{
+		Master.SendMsg(); // 发送到手机
+		delay_ms(20);
 	}
 }

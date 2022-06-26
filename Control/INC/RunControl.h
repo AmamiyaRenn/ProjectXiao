@@ -8,16 +8,7 @@
 #ifndef _RUN_CONTORL_H
 #define _RUN_CONTORL_H
 
-#include "Coordinate.h"
 #include "MyMath.h"
 #include "pid.h"
-#include "stm32f4xx.h"
-
-class RunControl
-{
-public:
-protected:
-    PositionStruct posStart, *posNow, posGoal; // 世界坐标系开始/当前/目标位置
-};
 
 #endif

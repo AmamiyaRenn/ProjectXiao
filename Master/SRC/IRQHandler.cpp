@@ -9,54 +9,15 @@
 
 u16 USART_RX_STA = 0;
 u8 USART_RX_BUF[32];
-void USART1_IRQHandler()
+void USART3_IRQHandler()
 {
-	u8 temp;
-	if (USART_GetITStatus(USART1, USART_IT_ORE) != RESET) // 过载重置接受数组
+	char rec_data;
+	if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET)
 	{
-		temp = USART_ReceiveData(USART1);
-		USART_RX_STA = 0;
-		memset(USART_RX_BUF, 0, sizeof(USART_RX_BUF));
-	}
-	else if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-	{
-		USART_ClearFlag(USART1, USART_IT_RXNE);
-		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
-		temp = USART_ReceiveData(USART1);
-
-		if (temp == '#')
-		{
-			u8 i;
-			USART_RX_STA |= 0x40;
-			for (i = 0; i < 32; i++)
-				USART_RX_BUF[i] = 0x00;
-		}
-		else if ((USART_RX_STA & 0x40) != 0) // 接收已经开始
-		{
-			if ((USART_RX_STA & 0x80) == 0) // 接收未完成
-			{
-				if (temp != 0x0d)
-				{
-					USART_RX_BUF[USART_RX_STA & 0X3F] = temp;
-					USART_RX_STA++;
-					if ((USART_RX_STA & 0X3F) > 31)
-						USART_RX_STA = 0; // 超出接收范围
-				}
-				else
-					USART_RX_STA |= 0x80; // 接收完成了
-			}
-		}
-		if ((USART_RX_STA & 0x80) != 0)
-		{
-			if (USART_RX_BUF[0] == 'O')
-			{
-				if (USART_RX_BUF[1] == 'N')
-					LED2_ON;
-				if (USART_RX_BUF[1] == 'F' && USART_RX_BUF[2] == 'F')
-					LED2_OFF;
-			}
-			USART_RX_STA = 0;
-		}
+		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+		/* Read one byte from the receive data register */
+		rec_data = USART_ReceiveData(USART3);
+		Master.ReadMsg(rec_data);
 	}
 }
 
@@ -65,7 +26,7 @@ void EXTI15_10_IRQHandler()
 	if (EXTI_GetITStatus(IRIN_EXITLINE) != RESET) // 红外中断
 	{
 		EXTI_ClearITPendingBit(IRIN_EXITLINE); // 清除中断标志
-		IRCtrl->RecNewMsg();
+		IRCtrl.RecNewMsg();
 	}
 }
 
@@ -75,7 +36,8 @@ void TIM2_IRQHandler()
 	{
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 
-		Xiao->updateState(); // 把状态更新放在这里，更加准确
+		Chassis.updateAllMotor(); // 把状态更新放在这里，更加准确
+		Master.RobotMsg.WorldTime += 0.1f;
 	}
 }
 

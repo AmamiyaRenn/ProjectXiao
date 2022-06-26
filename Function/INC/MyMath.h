@@ -28,6 +28,31 @@ inline void LineToValue(float &val, float setval, float k, float threshold) { va
 // 将数字约束在一个范围内
 inline float constrainValue(float val, float min, float max) { return val < min ? min : (val > max ? max : val); }
 
+/**
+ * @brief 最小转角
+ * @param angleNew 新角度
+ * @param angleLast 旧角度
+ * @param angleTurn 需要转过的角度
+ * @param isRad 单位是rad(否则为deg)
+ * @return 运动方向是否反向（-1为反向，1为同向）
+ */
+inline float ClosestTurnAngle(const float angleNew, const float angleLast, float &angleTurn, bool isRad)
+{
+	const float angleDiff = angleNew - angleLast; // 转角（过程量）
+	int temp = 0;
+	if (isRad)
+	{
+		temp = floor(angleDiff / PI + 0.5f);
+		angleTurn = angleDiff - PI * temp;
+	}
+	else
+	{
+		temp = floor(angleDiff / 180 + 0.5f);
+		angleTurn = angleDiff - 180 * temp;
+	}
+	return pow(-1.f, temp);
+}
+
 enum StateEnum
 {
 	StatePreparing,	 // 准备中
@@ -70,27 +95,20 @@ struct Vector2f
 	void operator-=(const Vector2f &v) { x -= v.x, y -= v.y; }
 	// 自乘
 	void operator*=(const Vector2f &v) { x *= v.x, y *= v.y; }
-	// 返回自身标准化后的值
+	// 返回自身的标准化值
 	Vector2f normalize() const
 	{
-		const float mag2 = x * x + y * y;
-		if (mag2 > 0)
-		{
-			const float invMag = 1 / sqrt(mag2);
-			return Vector2f(x * invMag, y * invMag);
-		}
-		return *this;
+		const float magnitude = norm();
+		const float invMag = 1 / magnitude;
+		return Vector2f(x * invMag, y * invMag);
 	}
 	// 将自身标准化（化为单位向量）
 	void normalized()
 	{
-		const float mag2 = x * x + y * y;
-		if (mag2 > 0)
-		{
-			const float invMag = 1 / sqrt(mag2);
-			x = x * invMag;
-			y = y * invMag;
-		}
+		const float magnitude = norm();
+		const float invMag = 1 / magnitude;
+		x = x * invMag;
+		y = y * invMag;
 	}
 	// 二范数
 	float norm() const { return sqrt(x * x + y * y); }
@@ -100,8 +118,8 @@ struct Vector2f
 	float dot(const Vector2f &v) const { return x * v.x + y * v.y; }
 	// 对另一个向量的投影
 	float projection(const Vector2f &v) const { return this->dot(v) / v.dot(v); }
-	// 平面角（rad）
-	float CalculateAngleRad() const { return y < 0 ? RadToDeg(2 * PI - acos(x)) : RadToDeg(acos(x)); }
+	// 计算平面角（deg）(要求已被标准化)
+	float CalculateAngleDeg() const { return y < 0 ? RadToDeg(2 * PI - acos(x)) : RadToDeg(acos(x)); }
 };
 
 #endif

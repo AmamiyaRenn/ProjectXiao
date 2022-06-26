@@ -19,11 +19,13 @@ public:
     void MotorHardwareInit();
     void updateAllMotor();
     // 设置电机速度，范围为[0,50]
-    void setAllMotorSpeed(s8 leftSpeed, s8 rightSpeed) { this->leftSpeed = leftSpeed, this->rightSpeed = rightSpeed; }
+    void setAllMotorSpeed(int leftSpeed, int rightSpeed) { this->leftSpeed = leftSpeed, this->rightSpeed = rightSpeed; }
 
 private:
-    s8 leftSpeed, rightSpeed; // 左/右速度
-    s8 SpeedDutyCount;        // 占空比计数器, 50次一周期
+    int leftSpeed, rightSpeed; // 左/右速度
+    int SpeedDutyCount;        // 占空比计数器, 50次一周期
 };
+
+extern ChassisClass Chassis;
 
 #endif

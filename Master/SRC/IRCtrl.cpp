@@ -7,7 +7,7 @@
  */
 #include "IRCtrl.h"
 
-IRCtrlClass *IRCtrl;
+IRCtrlClass IRCtrl;
 
 // 外部中断配置 红外遥控配置
 void IRCtrlClass::Init()
@@ -118,36 +118,36 @@ void IRCtrlClass::RecNewMsg(void)
 	ir_rec_flag = true;
 }
 
-/**
- * @brief 红外遥控主函数
- * @param Xiao 被控对象
- */
-void IRCtrlClass::Control(XiaoClass *Xiao)
-{
-	if (ir_rec_flag) // 接收到红外信号
-	{
-		ir_rec_flag = false;
-		switch (ctrl_comm)
-		{
-		case COMM_UP:
-			Xiao->Run(SPEED_DUTY, SPEED_DUTY);
-			break;
+// /**
+//  * @brief 红外遥控主函数
+//  * @param Xiao 被控对象
+//  */
+// void IRCtrlClass::Control(XiaoClass *Xiao)
+// {
+// 	if (ir_rec_flag) // 接收到红外信号
+// 	{
+// 		ir_rec_flag = false;
+// 		switch (ctrl_comm)
+// 		{
+// 		case COMM_UP:
+// 			Xiao->Run(SPEED_DUTY, SPEED_DUTY);
+// 			break;
 
-		case COMM_DOWN:
-			Xiao->Run(-SPEED_DUTY, -SPEED_DUTY);
-			break;
+// 		case COMM_DOWN:
+// 			Xiao->Run(-SPEED_DUTY, -SPEED_DUTY);
+// 			break;
 
-		case COMM_LEFT:
-			Xiao->Run(-20, SPEED_DUTY + 10);
-			break;
+// 		case COMM_LEFT:
+// 			Xiao->Run(-20, SPEED_DUTY + 10);
+// 			break;
 
-		case COMM_RIGHT:
-			Xiao->Run(SPEED_DUTY + 10, -20);
-			break;
+// 		case COMM_RIGHT:
+// 			Xiao->Run(SPEED_DUTY + 10, -20);
+// 			break;
 
-		case COMM_STOP:
-			Xiao->Run(0, 0);
-			break;
-		}
-	}
-}
+// 		case COMM_STOP:
+// 			Xiao->Run(0, 0);
+// 			break;
+// 		}
+// 	}
+// }
