@@ -51,15 +51,9 @@ void USART1_IRQHandler()
 			if (USART_RX_BUF[0] == 'O')
 			{
 				if (USART_RX_BUF[1] == 'N')
-				{
 					LED2_ON;
-					LED3_ON;
-				}
 				if (USART_RX_BUF[1] == 'F' && USART_RX_BUF[2] == 'F')
-				{
 					LED2_OFF;
-					LED3_OFF;
-				}
 			}
 			USART_RX_STA = 0;
 		}

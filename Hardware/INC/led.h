@@ -1,3 +1,10 @@
+/***
+ * @Description:
+ * @Author: Amamiya
+ * @Date: 2020-03-16 07:55:03
+ * @TechChangeTheWorld
+ * @WHUROBOCON_Alright_Reserved
+ */
 #ifndef _LED_H
 #define _LED_H
 
@@ -10,13 +17,8 @@ extern "C"
 {
 #endif
 
-#define LED2_ON GPIOE->BRR = GPIO_Pin_2
-#define LED3_ON GPIOE->BRR = GPIO_Pin_3
-#define LED2_OFF GPIOE->BSRR = GPIO_Pin_2
-#define LED3_OFF GPIOE->BSRR = GPIO_Pin_3
-#define Cylinder_OPEN GPIOB->BSRR = GPIO_Pin_0
-#define Cylinder_CLOSE GPIOB->BRR = GPIO_Pin_0
-#define Cylinder_TOGGLE GPIOB->ODR ^= GPIO_Pin_0
+#define LED2_ON GPIOE->BRR = GPIO_Pin_12
+#define LED2_OFF GPIOE->BSRR = GPIO_Pin_12
 
     void LED_Init(void);
     void GPIOCLKInit(void);

@@ -1,9 +1,17 @@
+/***
+ * @Description:
+ * @Author: Amamiya
+ * @Date: 2020-03-16 07:55:06
+ * @TechChangeTheWorld
+ * @WHUROBOCON_Alright_Reserved
+ */
 #include "main.h"
 
 int main()
 {
-	SystemInit();									// 系统初始化
-	NVIC_SetPriorityGrouping(NVIC_PriorityGroup_3); // 设置中断分组为第三组
+	SystemInit(); // 系统初始化
+	delay_init();
+	NVIC_SetPriorityGrouping(NVIC_PriorityGroup_2); // 设置中断分组为第三组
 
 	delay_ms(100); // 启动延时
 	GPIOCLKInit();
@@ -13,6 +21,8 @@ int main()
 	IRCtrl->Init();
 	LED_Init();
 	TIM2_Init();
+	Beep_Configuration();
+	Beep_Start();
 
 	OSInit(); // 启动UCOSII
 	OSTaskCreate(TaskStart, (void *)0, &start_task_stk[START_TASK_STK_SIZE - 1], START_TASK_PRIO);
@@ -44,7 +54,8 @@ static void TaskRUN(void *pdata)
 			IRCtrl->Control(Xiao);
 			break;
 		}
-		OSTimeDly(10);
+		Xiao->Run(Master.ControlMsg.leftSpeed, Master.ControlMsg.rightSpeed);
+		delay_ms(20);
 	}
 }
 
@@ -58,17 +69,11 @@ static void TaskUSART(void *pdata)
 	float usart_time_step = 4.0;
 	for (;;)
 	{
-		OSTimeDly(usart_time_step * 10); // 延时usart_time_step(ms)
+		delay_ms(usart_time_step);
 		tic += 1;
 		if (tic % (int)(2 * 1000 / usart_time_step) < 1000 / usart_time_step)
-		{
 			LED2_ON;
-			LED3_OFF;
-		}
 		else
-		{
 			LED2_OFF;
-			LED3_ON;
-		}
 	}
 }

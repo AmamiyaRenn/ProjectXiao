@@ -24,6 +24,7 @@ struct ControlMsgStruct
 {
 public:
     bool Reset; // 软件重启
+	float leftSpeed,rightSpeed;
     XiaoControlModeEnum ControlMode;
 };
 

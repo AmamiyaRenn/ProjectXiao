@@ -8,6 +8,8 @@
 #ifndef _DELAY_H
 #define _DELAY_H
 
+#include "sys.h"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -15,8 +17,9 @@ extern "C"
 
 #include "stm32f10x.h"
 
-    void delay_ms(unsigned int t);
-    void delay_us(unsigned int t);
+    void delay_init(void);
+    void delay_ms(u16 nms);
+    void delay_us(u32 nus);
 
 #ifdef __cplusplus
 }
