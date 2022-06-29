@@ -26,7 +26,7 @@ public:
     bool Reset; // 软件重启
     float leftSpeed, rightSpeed;
     XiaoControlModeEnum ControlMode;
-    Vector2f JoyStickPos; // 摇杆位置
+    float roll, pitch; // 翻滚角/俯仰角
 };
 
 struct RobotMsgStruct

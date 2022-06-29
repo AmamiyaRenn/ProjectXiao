@@ -8,8 +8,8 @@
 #include "main.h"
 
 UsartClass Usart;
-JoyStickControlClass JoyStickControl;
 XiaoClass *Xiao;
+GyroCtrlClass *GyroCtrl;
 
 int main()
 {
@@ -20,7 +20,6 @@ int main()
 	delay_ms(100); // 启动延时
 	GPIOCLKInit();
 	Chassis.MotorHardwareInit();
-	IRCtrl.Init();
 	LED_Init();
 	TIM2_Init();
 	Beep_Configuration();
@@ -51,8 +50,9 @@ static void TaskStart(void *pdata)
 
 static void TaskRUN(void *pdata)
 {
-	Xiao = new XiaoClass(&Chassis, &IRCtrl, &JoyStickControl);
-	JoyStickControl.linkJoyStickPos(&Master.ControlMsg.JoyStickPos);
+	GyroCtrl = new GyroCtrlClass(&Master.ControlMsg.roll, &Master.ControlMsg.pitch);
+	GyroCtrl->setThreshold(0.05f, 0.1f);
+	Xiao = new XiaoClass(&Chassis, GyroCtrl);
 	for (;;)
 	{
 		if (Master.ControlMsg.Begin)
@@ -60,7 +60,7 @@ static void TaskRUN(void *pdata)
 			switch (Master.ControlMsg.ControlMode)
 			{
 			case BluetoothRemoteControl:
-				Xiao->JoyStickFunction();
+				Xiao->GyroCtrlFunction();
 				break;
 
 			case InfraredRemoteControl:

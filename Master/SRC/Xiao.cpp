@@ -7,21 +7,33 @@
  */
 #include "Xiao.h"
 
-void XiaoClass::JoyStickFunction()
+float speedTemp;
+
+void XiaoClass::GyroCtrlFunction()
 {
-    JoyStickControl->update();
-    float angle = JoyStickControl->getAngle();
-    float SpeedTemp = JoyStickControl->getMagnitude() * SPEED_PERIOD;
-    if (angle >= 0.f && angle < 180.f)
-        Run(int((180.f - angle) / 180.f * SpeedTemp),
-            int(SpeedTemp));
-    else if (angle >= 180.f)
-        Run(int((180.f - angle) / 180.f * SpeedTemp),
-            -int(SpeedTemp));
-    else if (angle >= -180.f && angle < 0.f)
-        Run(int(SpeedTemp),
-            int((180.f + angle) / 180.f * SpeedTemp));
-    else
-        Run(-int(SpeedTemp),
-            int((180.f + angle) / 180.f * SpeedTemp));
+    if (abs(GyroCtrl->getPitch()) > GyroCtrl->getPitchThreshold())
+    {
+        speedTemp = (GyroCtrl->getPitch() - sign(GyroCtrl->getPitch()) * GyroCtrl->getPitchThreshold()) * 200.f;
+        speedTemp = abs(speedTemp) > SPEED_PERIOD ? sign(speedTemp) * SPEED_PERIOD : speedTemp;
+        if (abs(GyroCtrl->getRoll()) > GyroCtrl->getRollThreshold())
+        {
+            if (sign(GyroCtrl->getRoll()) == 1)
+            {
+                float leftSpeed = speedTemp - (GyroCtrl->getRoll() - sign(GyroCtrl->getRoll()) * GyroCtrl->getRollThreshold()) * 200.f;
+                leftSpeed = abs(leftSpeed) > SPEED_PERIOD ? sign(leftSpeed) * SPEED_PERIOD : leftSpeed;
+                Run(int(leftSpeed), int(speedTemp));
+                return;
+            }
+            else
+            {
+                float rightSpeed = speedTemp + (GyroCtrl->getRoll() - sign(GyroCtrl->getRoll()) * GyroCtrl->getRollThreshold()) * 200.f;
+                rightSpeed = abs(rightSpeed) > SPEED_PERIOD ? sign(rightSpeed) * SPEED_PERIOD : rightSpeed;
+                Run(int(speedTemp), int(rightSpeed));
+                return;
+            }
+        }
+        Run(int(speedTemp), int(speedTemp));
+        return;
+    }
+    Run(0, 0);
 }

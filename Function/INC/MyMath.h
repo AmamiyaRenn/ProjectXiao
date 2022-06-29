@@ -14,8 +14,7 @@
 #define PI 3.1415926535f
 #define DegToRad(x) x * 0.0174532925f
 #define RadToDeg(x) x * 57.2957795f
-#define SIGN(x) x > 0 ? 1 : -1
-
+inline float sign(float x) { return x < 0.0f ? -1.0f : 1.0f; }
 /**
  * @brief 线性改变值
  * @param val 目标变量
@@ -23,7 +22,7 @@
  * @param k 单次变化值
  * @param _threshold 阈值
  */
-inline void LineToValue(float &val, float setval, float k, float threshold) { val = fabs(val - setval) > threshold ? val - k * SIGN(val - setval) : setval; }
+inline void LineToValue(float &val, float setval, float k, float threshold) { val = fabs(val - setval) > threshold ? val - k * sign(val - setval) : setval; }
 
 // 将数字约束在一个范围内
 inline float constrainValue(float val, float min, float max) { return val < min ? min : (val > max ? max : val); }

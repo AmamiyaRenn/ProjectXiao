@@ -673,6 +673,16 @@
               <FileType>5</FileType>
               <FilePath>.\Control\INC\RunControl.h</FilePath>
             </File>
+            <File>
+              <FileName>GyroCtrl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Control\INC\GyroCtrl.h</FilePath>
+            </File>
+            <File>
+              <FileName>JoyStick.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Control\INC\JoyStick.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
