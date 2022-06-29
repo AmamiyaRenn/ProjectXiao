@@ -24,7 +24,7 @@ int main()
 	LED_Init();
 	TIM2_Init();
 	Beep_Configuration();
-	Usart.usart3Init(115200);
+	Usart.usart3Init(9600);
 
 	Beep_Start();
 

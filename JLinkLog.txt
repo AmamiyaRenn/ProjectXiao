@@ -1,7 +1,0 @@
-
-T2808 000:294 SEGGER J-Link V5.10h Log File (0001ms, 0262ms total)
-T2808 000:294 DLL Compiled: Jan 21 2016 19:24:29 (0001ms, 0262ms total)
-T2808 000:294 Logging started @ 2022-06-29 16:23 (0001ms, 0262ms total)
-T2808 000:295 JLINK_SetWarnOutHandler(...) (0000ms, 0262ms total)
-T2808 000:295 JLINK_OpenEx(...)
-Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
