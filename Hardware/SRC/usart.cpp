@@ -79,7 +79,7 @@ void UsartClass::usart3Init(u32 baudRate)
 	USART_Cmd(USART3, ENABLE);					   //打开串口
 	USART_ClearFlag(USART3, USART_FLAG_TC);		   //解决第一个数据发送失败的问题
 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+	// NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
 	NVIC_InitStruct.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 2;

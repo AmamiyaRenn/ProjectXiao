@@ -22,7 +22,7 @@ extern "C"
 {
 #endif
 
-    void USART1_IRQHandler();
+    void USART3_IRQHandler();
     void EXTI15_10_IRQHandler();
     void TIM2_IRQHandler();
 
